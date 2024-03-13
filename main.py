@@ -84,14 +84,14 @@ def dnn_training(df, columns, epochs=100):
         
         for epoch in range(epochs):
             optimizer.zero_grad()
-            outputs = model(X_tensor)
-            loss = criterion(outputs, y_tensor)
+            outputs = model(X)
+            loss = criterion(outputs, y)
             loss.backward()
             optimizer.step()
 
         # Use trained model to predict values over the X set
         with torch.no_grad():
-            y_pred = model(X_tensor).numpy()
+            y_pred = model(X).numpy()
         df_predictor[col] = y_pred.flatten()
         residues = y.flatten() - y_pred.flatten()
         df_residual[col] = residues
