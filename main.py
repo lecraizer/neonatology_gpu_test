@@ -52,10 +52,11 @@ class NeuralNetwork(nn.Module):
         x = self.output_layer(x)
         return x
 
-def scale_dataset(X):
+def scale_dataset(X, device):
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
-    return X_scaled
+    X_tensor = torch.tensor(X_scaled, dtype=torch.float32, device=device)
+    return X_tensor
 
 def dnn_training(df, columns, epochs=100):
     df_residual = pd.DataFrame(index=df.index)
@@ -68,12 +69,13 @@ def dnn_training(df, columns, epochs=100):
 
         # X and y set for training
         X = df_final.drop(columns=[col])
-        X = scale_dataset(X)
+        X = scale_dataset(X, device)
         y = df_final[col].values.reshape(-1, 1)
+        y = torch.tensor(y, dtype=torch.float32, device=device)
         
-        # Convert data to PyTorch tensors
-        X_tensor = torch.tensor(X, dtype=torch.float32).to(device)
-        y_tensor = torch.tensor(y, dtype=torch.float32).to(device)
+        # # Convert data to PyTorch tensors
+        # X_tensor = torch.tensor(X, dtype=torch.float32).to(device)
+        # y_tensor = torch.tensor(y, dtype=torch.float32).to(device)
         
         # Model training
         model = NeuralNetwork()
