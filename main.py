@@ -56,6 +56,7 @@ def scale_dataset(X, device):
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
     X_tensor = torch.tensor(X_scaled, dtype=torch.float32, device=device)
+    print(f"X_tensor device: {X_tensor.device}")
     return X_tensor
 
 def dnn_training(df, columns, epochs=100):
@@ -72,6 +73,7 @@ def dnn_training(df, columns, epochs=100):
         X = scale_dataset(X, device)
         y = df_final[col].values.reshape(-1, 1)
         y = torch.tensor(y, dtype=torch.float32, device=device)
+        print(f"y_tensor device: {y.device}")
         
         # # Convert data to PyTorch tensors
         # X_tensor = torch.tensor(X, dtype=torch.float32).to(device)
